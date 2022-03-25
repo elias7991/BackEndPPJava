@@ -1,0 +1,103 @@
+-- creacion de la secuencia para la clave primaria	
+CREATE SEQUENCE sec_id_cliente START 1;
+
+-- creacion de la tabla cliente
+CREATE TABLE cliente(
+	-- autoincremental
+	id_cliente INTEGER DEFAULT NEXTVAL('sec_id_cliente') NOT NULL,
+	nombre_cliente CHAR(50) NOT NULL,
+	apellido_cliente CHAR(50) NOT NULL,
+	nro_documento INT UNIQUE CHECK (nro_documento > 0) NOT NULL,
+	tipo_documento CHAR(50) NOT NULL,
+	nacionalidad CHAR(50),
+	email CHAR(100) UNIQUE,
+	telefono CHAR(50),
+	fecha_nacimiento DATE CHECK (fecha_nacimiento < CURRENT_DATE) NOT NULL,
+	CONSTRAINT cliente_pk PRIMARY KEY (id_cliente)
+);
+
+
+-- secuencia para el id de vencimiento de productos
+CREATE SEQUENCE sec_id_ven START 1;
+-- creacion de la tabla de vencimiento de puntos
+CREATE TABLE vencimiento_puntos(
+	id_vencimiento_puntos INTEGER DEFAULT NEXTVAL('sec_id_ven') NOT NULL,
+	fecha_inicio DATE NOT NULL,
+	fecha_fin DATE CHECK (fecha_fin > fecha_inicio) NOT NULL,
+	dias_duracion INT NOT NULL,
+	CONSTRAINT vecimiento_puntos_pk PRIMARY KEY (id_vencimiento_puntos)
+);
+
+-- creacion de la secuencia para el campo de id de la tabla asig_puntos
+CREATE SEQUENCE sec_reglas_asignacion START 1;
+-- creacion de la tabla de asignacion de puntos
+CREATE TABLE reglas_asig(
+	-- autoincremental
+	id_reglas_asig INTEGER DEFAULT NEXTVAL('sec_reglas_asignacion') NOT NULL,
+	limite_inferior INTEGER NOT NULL,
+	limite_superior INTEGER CHECK (limite_superior > limite_inferior) NOT NULL,
+	puntos INTEGER CHECK (puntos > 0) NOT NULL,
+	CONSTRAINT asi_puntos_pk PRIMARY KEY (id_reglas_asig)
+);
+
+
+-- secuencia para bolsa de puntos
+CREATE SEQUENCE sec_bolsa_puntos START 1;
+
+CREATE TABLE bolsa_puntos(
+	id_bolsa_puntos INTEGER DEFAULT NEXTVAL('sec_bolsa_puntos') NOT NULL,
+	id_cliente INTEGER NOT NULL,
+	fecha_asignacion DATE NOT NULL,
+	fecha_caducidad DATE CHECK (fecha_caducidad > fecha_asignacion) NOT NULL,
+	puntos_totales INTEGER NOT NULL,
+	puntos_utilizados INTEGER CHECK (puntos_utilizados <= puntos_totales) NOT NULL,
+	saldo_puntos INTEGER CHECK (saldo_puntos >= 0) NOT NULL,
+	monto_operacion INTEGER CHECK (monto_operacion > 0) NOT NULL,
+	CONSTRAINT bolsa_puntos_pk PRIMARY KEY (id_bolsa_puntos),
+	CONSTRAINT bolsa_puntos_fk FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)	
+);
+
+
+-- secuencia para la tabla concepto_puntos
+CREATE SEQUENCE sec_concepto_puntos START 1;
+
+-- tabla concepto_puntos
+CREATE TABLE concepto_puntos(
+	id_concepto_puntos INTEGER DEFAULT NEXTVAL('sec_concepto_puntos') NOT NULL,
+	descripcion CHAR(250) NOT NULL,
+	puntos_requeridos INTEGER CHECK (puntos_requeridos > 0) NOT NULL,
+	CONSTRAINT concepto_puntos_pk PRIMARY KEY (id_concepto_puntos)
+);
+
+
+CREATE SEQUENCE sec_cabecera_uso_puntos START 1;
+
+CREATE TABLE cabecera_uso_puntos(
+	id_cabecera_uso_puntos INTEGER DEFAULT NEXTVAL('sec_cabecera_uso_puntos') NOT NULL,
+	id_cliente INTEGER NOT NULL,
+	id_concepto_puntos INTEGER NOT NULL,
+	puntaje_utilizado INTEGER CHECK (puntaje_utilizado > 0) NOT NULL,
+	fecha_uso DATE CHECK (fecha_uso <= CURRENT_DATE) NOT NULL,
+	CONSTRAINT cabecera_uso_puntos_pk PRIMARY KEY (id_cabecera_uso_puntos),
+	CONSTRAINT cabecera_id_cliente_fk FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
+	CONSTRAINT cabecera_id_concepto_fk FOREIGN KEY (id_concepto_puntos) REFERENCES concepto_puntos(id_concepto_puntos)
+);
+
+
+
+CREATE SEQUENCE sec_detalle_uso_puntos START 1;
+
+CREATE TABLE detalle_uso_puntos(
+	id_detalle_uso_puntos INTEGER NOT NULL,
+	id_cabecera_uso_puntos INTEGER NOT NULL,
+	id_bolsa_puntos INTEGER NOT NULL,
+	puntaje_utilizado INTEGER CHECK (puntaje_utilizado >= 0) NOT NULL,
+	CONSTRAINT detalle_uso_puntos_pk PRIMARY KEY (id_detalle_uso_puntos),
+	CONSTRAINT detalle_cabecera_fk FOREIGN KEY (id_cabecera_uso_puntos) REFERENCES cabecera_uso_puntos(id_cabecera_uso_puntos),
+	CONSTRAINT detalle_bolsa_fk FOREIGN KEY (id_bolsa_puntos) REFERENCES bolsa_puntos(id_bolsa_puntos)
+);
+
+
+
+
+
