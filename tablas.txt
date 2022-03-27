@@ -5,13 +5,13 @@ CREATE SEQUENCE sec_id_cliente START 1;
 CREATE TABLE cliente(
 	-- autoincremental
 	id_cliente INTEGER DEFAULT NEXTVAL('sec_id_cliente') NOT NULL,
-	nombre_cliente CHAR(50) NOT NULL,
-	apellido_cliente CHAR(50) NOT NULL,
+	nombre_cliente VARCHAR(50) NOT NULL,
+	apellido_cliente VARCHAR(50) NOT NULL,
 	nro_documento INT UNIQUE CHECK (nro_documento > 0) NOT NULL,
-	tipo_documento CHAR(50) NOT NULL,
-	nacionalidad CHAR(50),
-	email CHAR(100) UNIQUE,
-	telefono CHAR(50),
+	tipo_documento VARCHAR(50) NOT NULL,
+	nacionalidad VARCHAR(50),
+	email VARCHAR(100) UNIQUE,
+	telefono VARCHAR(50),
 	fecha_nacimiento DATE CHECK (fecha_nacimiento < CURRENT_DATE) NOT NULL,
 	CONSTRAINT cliente_pk PRIMARY KEY (id_cliente)
 );
@@ -64,7 +64,7 @@ CREATE SEQUENCE sec_concepto_puntos START 1;
 -- tabla concepto_puntos
 CREATE TABLE concepto_puntos(
 	id_concepto_puntos INTEGER DEFAULT NEXTVAL('sec_concepto_puntos') NOT NULL,
-	descripcion CHAR(250) NOT NULL,
+	descripcion VARCHAR(250) NOT NULL,
 	puntos_requeridos INTEGER CHECK (puntos_requeridos > 0) NOT NULL,
 	CONSTRAINT concepto_puntos_pk PRIMARY KEY (id_concepto_puntos)
 );
