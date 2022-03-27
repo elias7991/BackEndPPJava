@@ -22,7 +22,7 @@ public class PersonaDAO {
 	}
 	
 	public List<Persona> lista() {
-		Query q = this.em.createQuery("select p from Persona");
+		Query q = this.em.createQuery("select p from Persona p");
 		return (List<Persona>)q.getResultList();
 	}
 	
