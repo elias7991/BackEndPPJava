@@ -8,6 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.validation.ConstraintViolationException;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Stateless
@@ -26,6 +29,27 @@ public class ClienteDAO {
         Query q = this.em.createQuery("select c from Cliente c");
 
         return (List<Cliente>)q.getResultList();
+    }
+
+    public void update(Cliente entidad, int id) throws ParseException {
+
+        Cliente e = this.em.find(Cliente.class, id);
+        e.setNombre(entidad.getNombre());
+        e.setApellido(entidad.getApellido());
+        e.setNroDocumneto(entidad.getNroDocumneto());
+        e.setTipoDocumento(entidad.getTipoDocumento());
+        e.setNacionalidad(entidad.getNacionalidad());
+        e.setEmail(entidad.getEmail());
+        e.setTelefono(entidad.getTelefono());
+
+        // De cadena a Date de SQL
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date date = format.parse(e.getFechaNacimiento());
+        Date sqlDate = new Date(date.getTime());
+        e.setFechaNacimiento(sqlDate);
+
+        this.em.merge(e);
+
     }
 
 }
