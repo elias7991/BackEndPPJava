@@ -6,6 +6,8 @@ import javax.persistence.*;
 import javax.validation.Constraint;
 import javax.validation.constraints.Min;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 @Entity
 
@@ -111,8 +113,10 @@ public class Cliente {
         this.telefono = telefono;
     }
 
-    public Date getFechaNacimiento() {
-        return fechaNacimiento;
+    public String getFechaNacimiento() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String strDate = dateFormat.format(fechaNacimiento);
+        return strDate;
     }
 
     public void setFechaNacimiento(Date fechaNacimiento) {
