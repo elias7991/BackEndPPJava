@@ -1,9 +1,9 @@
 package py.com.progweb.prueba.rest;
 
-import py.com.progweb.prueba.ejb.ClienteDAO;
 import py.com.progweb.prueba.ejb.ConceptoUsoPuntosDAO;
-import py.com.progweb.prueba.model.Cliente;
+import py.com.progweb.prueba.ejb.VencimientoPuntosDAO;
 import py.com.progweb.prueba.model.ConceptoUsoPuntos;
+import py.com.progweb.prueba.model.VencimientoPuntos;
 
 import javax.ejb.EJBTransactionRolledbackException;
 import javax.inject.Inject;
@@ -12,25 +12,25 @@ import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.text.ParseException;
 
-@Path("concepto_puntos")
+@Path("vencimiento_puntos")
 @Consumes("application/json")
 @Produces("application/json")
-public class ConceptoUsoPuntosRest {
+public class VencimientoPuntosRest {
 
     @Inject
-    private ConceptoUsoPuntosDAO puntosDAO;
+    private VencimientoPuntosDAO vencimientoPuntosDAO;
 
     @GET
     @Path("/")
     public Response listar() {
-        return Response.ok(puntosDAO.lista()).build();
+        return Response.ok(vencimientoPuntosDAO.lista()).build();
     }
 
     @POST
     @Path("/")
-    public Response crear(ConceptoUsoPuntos p) {
+    public Response crear(VencimientoPuntos p) {
         try{
-            this.puntosDAO.agregar(p);
+            this.vencimientoPuntosDAO.agregar(p);
             return Response.ok().build();
         }catch (EJBTransactionRolledbackException e){
             Throwable t = e.getCause();
@@ -38,8 +38,8 @@ public class ConceptoUsoPuntosRest {
                 t = t.getCause();
                 if (t instanceof SQLException) {
                     // Here you're sure you have a ConstraintViolationException, you can handle
-                    if(t.getMessage().contains("concepto_puntos_puntos_requeridos_check"))
-                        return Response.status(409).entity("puntos_requeridos value must be > 0").build();
+                    if(t.getMessage().contains("vencimiento_puntos_check"))
+                        return Response.status(409).entity("fechaFin no puede ser menor a fechaInicio").build();
                 }
 
             }
@@ -50,9 +50,9 @@ public class ConceptoUsoPuntosRest {
 
     @PUT
     @Path("/{id}")
-    public Response update(ConceptoUsoPuntos c, @PathParam("id") int id) {
+    public Response update(VencimientoPuntos c, @PathParam("id") int id) {
         try{
-            this.puntosDAO.update(c, id);
+            this.vencimientoPuntosDAO.update(c, id);
             return Response.ok().build();
         }catch (EJBTransactionRolledbackException e){
             Throwable t = e.getCause();
@@ -60,8 +60,8 @@ public class ConceptoUsoPuntosRest {
                 t = t.getCause();
                 if (t instanceof SQLException) {
                     // Here you're sure you have a ConstraintViolationException, you can handle it
-                    if(t.getMessage().contains("concepto_puntos_puntos_requeridos_check"))
-                        return Response.status(409).entity("puntos_requeridos value must be > 0").build();
+                    if(t.getMessage().contains("vencimiento_puntos_check"))
+                        return Response.status(409).entity("fechaFin no puede ser menor a fechaInicio").build();
                 }
 
             }
@@ -75,8 +75,9 @@ public class ConceptoUsoPuntosRest {
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") int id){
-        this.puntosDAO.delete(id);
+        this.vencimientoPuntosDAO.delete(id);
         return Response.ok().build();
     }
+
 
 }
