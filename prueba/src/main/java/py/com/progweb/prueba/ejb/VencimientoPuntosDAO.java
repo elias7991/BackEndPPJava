@@ -22,9 +22,10 @@ public class VencimientoPuntosDAO {
     @PersistenceContext(unitName = "pruebaPU")
     private EntityManager em;
 
-    public void agregar(VencimientoPuntos entidad) {
-
-        int days = (int) ((entidad.getFechaFin().getTime()-entidad.getFechaInicio().getTime())/86400000);
+    public void agregar(VencimientoPuntos entidad) throws ParseException {
+        // Format para pasar de String a date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        int days = (int) ((format.parse(entidad.getFechaFin()).getTime()-format.parse(entidad.getFechaInicio()).getTime())/86400000);
         entidad.setDiasDuracion(days);
         this.em.persist(entidad);
 
@@ -37,11 +38,13 @@ public class VencimientoPuntosDAO {
     }
 
     public void update(VencimientoPuntos entidad, int id) throws ParseException {
+        // Format para pasar de String a date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         VencimientoPuntos e = this.em.find(VencimientoPuntos.class, id);
-        e.setFechaInicio(entidad.getFechaInicio());
-        e.setFechaFin(entidad.getFechaFin());
-        e.setDiasDuracion((int) ((entidad.getFechaFin().getTime()-entidad.getFechaInicio().getTime())/86400000));
+        e.setFechaInicio(new Date(format.parse(entidad.getFechaInicio()).getTime()));
+        e.setFechaFin(new Date(format.parse(entidad.getFechaFin()).getTime()));
+        e.setDiasDuracion((int) ((format.parse(entidad.getFechaFin()).getTime()-format.parse(entidad.getFechaInicio()).getTime())/86400000) );
 
         this.em.merge(e);
 

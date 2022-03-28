@@ -32,7 +32,7 @@ public class VencimientoPuntosRest {
         try{
             this.vencimientoPuntosDAO.agregar(p);
             return Response.ok().build();
-        }catch (EJBTransactionRolledbackException e){
+        }catch (EJBTransactionRolledbackException | ParseException e){
             Throwable t = e.getCause();
             while ((t != null) ) {
                 t = t.getCause();

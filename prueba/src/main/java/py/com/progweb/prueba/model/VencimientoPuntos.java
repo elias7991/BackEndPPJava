@@ -2,6 +2,8 @@ package py.com.progweb.prueba.model;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 @Entity
 @Table(name = "vencimiento_puntos")
@@ -34,16 +36,20 @@ public class VencimientoPuntos {
         this.idVencimiento = idVencimiento;
     }
 
-    public Date getFechaInicio() {
-        return fechaInicio;
+    public String getFechaInicio() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String strDate = dateFormat.format(fechaInicio);
+        return strDate;
     }
 
     public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public Date getFechaFin() {
-        return fechaFin;
+    public String getFechaFin() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String strDate = dateFormat.format(fechaFin);
+        return strDate;
     }
 
     public void setFechaFin(Date fechaFin) {
