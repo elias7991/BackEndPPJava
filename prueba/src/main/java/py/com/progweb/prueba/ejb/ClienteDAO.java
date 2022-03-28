@@ -52,4 +52,13 @@ public class ClienteDAO {
 
     }
 
+    public void delete(int id){
+
+        Cliente e = this.em.find(Cliente.class, id);
+
+        Query q = this.em.createQuery("DELETE from Cliente c WHERE c.idCliente =" + id);
+        q.executeUpdate();
+
+    }
+
 }

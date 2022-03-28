@@ -82,4 +82,11 @@ public class ClienteRest {
         return Response.ok().build();
     }
 
+    @DELETE
+    @Path("/{id}")
+    public Response delete(@PathParam("id") int id){
+        this.personaDAO.delete(id);
+        return Response.ok().build();
+    }
+
 }
