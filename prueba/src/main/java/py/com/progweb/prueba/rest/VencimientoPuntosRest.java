@@ -1,5 +1,6 @@
 package py.com.progweb.prueba.rest;
 
+import org.hibernate.QueryException;
 import py.com.progweb.prueba.ejb.ConceptoUsoPuntosDAO;
 import py.com.progweb.prueba.ejb.VencimientoPuntosDAO;
 import py.com.progweb.prueba.model.ConceptoUsoPuntos;
@@ -43,6 +44,8 @@ public class VencimientoPuntosRest {
                 }
 
             }
+        }catch (Throwable e){
+            return Response.status(409).entity(e.getMessage()).build();
         }
         return Response.ok().build();
     }
@@ -65,8 +68,8 @@ public class VencimientoPuntosRest {
                 }
 
             }
-        } catch (ParseException e) {
-            e.getMessage();
+        }catch (Throwable e){
+            return Response.status(409).entity(e.getMessage()).build();
         }
 
         return Response.ok().build();
