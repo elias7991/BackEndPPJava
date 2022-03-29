@@ -49,10 +49,10 @@ CREATE TABLE bolsa_puntos(
 	id_cliente INTEGER NOT NULL,
 	fecha_asignacion DATE NOT NULL,
 	fecha_caducidad DATE CHECK (fecha_caducidad > fecha_asignacion) NOT NULL,
-	puntos_totales INTEGER NOT NULL,
-	puntos_utilizados INTEGER CHECK (puntos_utilizados <= puntos_totales) NOT NULL,
-	saldo_puntos INTEGER CHECK (saldo_puntos >= 0) NOT NULL,
-	monto_operacion INTEGER CHECK (monto_operacion > 0) NOT NULL,
+	puntos_totales INT CHECK (puntos_totales > 0) NOT NULL,
+	puntos_utilizados INT CHECK (puntos_utilizados >= 0) NOT NULL,
+	saldo_puntos INT CHECK (saldo_puntos >= 0) NOT NULL,
+	monto_operacion INT CHECK (monto_operacion > 0) NOT NULL,
 	CONSTRAINT bolsa_puntos_pk PRIMARY KEY (id_bolsa_puntos),
 	CONSTRAINT bolsa_puntos_fk FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)	
 );
