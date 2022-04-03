@@ -28,6 +28,11 @@ public class BolsaPuntosDAO {
         return (List<BolsaPuntos>)q.getResultList();
     }
 
+    public List<BolsaPuntos> listaCliente(int id){
+        Query q = this.em.createQuery("select b from BolsaPuntos b where b.id_cliente=" + id);
+        return (List<BolsaPuntos>)q.getResultList();
+    }
+
     public void update(BolsaPuntos entidad, int id) throws ParseException {
 
         BolsaPuntos e = this.em.find(BolsaPuntos.class, id);
