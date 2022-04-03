@@ -80,12 +80,27 @@ public class BolsaPuntosRest {
                 if (t instanceof SQLException) {
                     // Here you're sure you have a ConstraintViolationException, you can handle it
 
-                    // if(t.getMessage().contains("cliente_nro_documento_key"))
-                    //     return Response.status(409).entity("nroDocumento value already exists ").build();
-                    // if(t.getMessage().contains("cliente_nro_documento_check"))
-                    //     return Response.status(409).entity("nro_documento value must be > 0").build();
-                    // if(t.getMessage().contains("cliente_email_key"))
-                    //     return Response.status(409).entity("email value already exists ").build();
+                    if(t.getMessage().contains("bolsa_puntos_fk")) {
+                        return Response.status(409).entity("No existe un cliente con ese id").build();
+
+                    } else if(t.getMessage().contains("bolsa_puntos_check")) {
+                        return Response.status(409).entity("fecha de caducidad debe ser mayor a fecha de asignacion").build();
+                    } else if(t.getMessage().contains("bolsa_puntos_puntos_totales_check")) {
+                        return Response.status(409).entity("puntos totales debe ser positivo mayor a cero").build();
+                    } else if(t.getMessage().contains("bolsa_puntos_puntos_utilizados_check")) {
+                        return Response.status(409).entity("puntos utilizados debe ser no negativo").build();
+                    } else if(t.getMessage().contains("bolsa_puntos_saldo_puntos_check")) {
+                        return Response.status(409).entity("saldo puntos debe ser no negativo").build();
+                    } else if(t.getMessage().contains("bolsa_puntos_monto_operacion_check")) {
+                        return Response.status(500).entity("monto operacion debe ser mayor a cero").build();
+
+                    } else if(t.getMessage().contains("fecha_asignacion")) {
+                        return Response.status(409).entity("el campo fecha_asignacion no puede ser nulo").build();
+                    }else if(t.getMessage().contains("fecha_caducidad")) {
+                        return Response.status(409).entity("el campo fecha_caducidad no puede ser nulo").build();
+                    } else {
+                        return Response.status(409).entity("error no identificado").build();
+                    }
                 }
 
             }
