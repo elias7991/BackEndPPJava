@@ -1,0 +1,7 @@
+py/com/progweb/prueba/rest/ApplicationConfig.class
+py/com/progweb/prueba/ejb/PersonaDAO.class
+py/com/progweb/prueba/ejb/ClienteDAO.class
+py/com/progweb/prueba/rest/ClienteRest.class
+py/com/progweb/prueba/rest/PersonaRest.class
+py/com/progweb/prueba/model/Cliente.class
+py/com/progweb/prueba/model/Persona.class

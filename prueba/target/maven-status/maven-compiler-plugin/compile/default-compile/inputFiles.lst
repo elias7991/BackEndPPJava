@@ -1,0 +1,7 @@
+/home/carinme/BackEndPPJava/prueba/src/main/java/py/com/progweb/prueba/model/Persona.java
+/home/carinme/BackEndPPJava/prueba/src/main/java/py/com/progweb/prueba/rest/ClienteRest.java
+/home/carinme/BackEndPPJava/prueba/src/main/java/py/com/progweb/prueba/ejb/ClienteDAO.java
+/home/carinme/BackEndPPJava/prueba/src/main/java/py/com/progweb/prueba/ejb/PersonaDAO.java
+/home/carinme/BackEndPPJava/prueba/src/main/java/py/com/progweb/prueba/rest/PersonaRest.java
+/home/carinme/BackEndPPJava/prueba/src/main/java/py/com/progweb/prueba/model/Cliente.java
+/home/carinme/BackEndPPJava/prueba/src/main/java/py/com/progweb/prueba/rest/ApplicationConfig.java
