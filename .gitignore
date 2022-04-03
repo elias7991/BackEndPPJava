@@ -1,2 +1,6 @@
 # omitir la carpeta del wildfly
 wildfly-18.0.1.Final/
+# ignoramos todo archivo proveniente del target
+prueba/target/
+.idea/
+BackEndPPJava.iml
