@@ -14,7 +14,7 @@ import javax.persistence.Table;
 //ver errores
 
 @Entity
-@Table(name = "regla_asignacion_punto")
+@Table(name = "reglas_asig")
 @NamedQueries({
 	@NamedQuery(name = "ReglaAsignacionPunto.all", query = "SELECT rap FROM ReglaAsignacionPunto rap")
 	,
@@ -24,10 +24,10 @@ public class ReglaAsignacionPunto {
 	}
 	
 	@Id
-	@Column(name = "id")
+	@Column(name = "id_reglas_asig")
 	@Basic(optional = false)
 	@GeneratedValue(generator = "reglaAsignacionPuntoSec", strategy = GenerationType.SEQUENCE)
-	@SequenceGenerator(name = "reglaAsignacionPuntoSec", sequenceName = "regla_asignacion_punto_sec", allocationSize = 0)
+	@SequenceGenerator(name = "reglaAsignacionPuntoSec", sequenceName = "sec_reglas_asignacion", allocationSize = 0)
 	private Integer id;
 	
 	@Column(name = "limite_inferior")
@@ -38,7 +38,7 @@ public class ReglaAsignacionPunto {
 	@Basic(optional = false)
 	private Integer limiteSuperior;
 	
-	@Column(name = "monto_equivalencia")
+	@Column(name = "puntos")
 	@Basic(optional = false)
 	private Integer montoEquivalencia;
 	
