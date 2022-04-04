@@ -84,17 +84,29 @@ CREATE TABLE cabecera_uso_puntos(
 );
 
 
-
 CREATE SEQUENCE sec_detalle_uso_puntos START 1;
 
+-- tabla detalle de uso
 CREATE TABLE detalle_uso_puntos(
-	id_detalle_uso_puntos INTEGER NOT NULL,
+	id_detalle_uso_puntos INTEGER DEFAULT NEXTVAL('sec_detalle_uso_puntos') NOT NULL,
 	id_cabecera_uso_puntos INTEGER NOT NULL,
-	id_bolsa_puntos INTEGER NOT NULL,
 	puntaje_utilizado INTEGER CHECK (puntaje_utilizado >= 0) NOT NULL,
 	CONSTRAINT detalle_uso_puntos_pk PRIMARY KEY (id_detalle_uso_puntos),
-	CONSTRAINT detalle_cabecera_fk FOREIGN KEY (id_cabecera_uso_puntos) REFERENCES cabecera_uso_puntos(id_cabecera_uso_puntos),
-	CONSTRAINT detalle_bolsa_fk FOREIGN KEY (id_bolsa_puntos) REFERENCES bolsa_puntos(id_bolsa_puntos)
+	CONSTRAINT detalle_cabecera_fk FOREIGN KEY (id_cabecera_uso_puntos) REFERENCES cabecera_uso_puntos(id_cabecera_uso_puntos)
+);
+
+
+
+CREATE SEQUENCE sec_detalles_bolsas START 1;
+
+-- tabla many to many para permitir a un uso de puntos consumir de varias bolsas
+CREATE TABLE detalles_bolsas(
+	id_detalles_bolsas INTEGER DEFAULT NEXTVAL('sec_detalles_bolsas') NOT NULL,
+	id_detalle INTEGER NOT NULL,
+	id_bolsa_puntos INTEGER NOT NULL,
+	CONSTRAINT detalles_bolsas_pk PRIMARY KEY (id_detalles_bolsas),
+	CONSTRAINT detalles_bolsas_detalle_fk FOREIGN KEY (id_detalle) REFERENCES detalle_uso_puntos(id_detalle_uso_puntos),
+	CONSTRAINT detalles_bolsas_bolsa_fk FOREIGN KEY (id_bolsa_puntos) REFERENCES bolsa_puntos(id_bolsa_puntos)
 );
 
 

@@ -7,9 +7,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Stateless
@@ -24,10 +22,10 @@ public class ConceptoUsoPuntosDAO {
 
     }
 
-    public List<Cliente> lista() {
+    public List<ConceptoUsoPuntos> lista() {
         Query q = this.em.createQuery("select c from ConceptoUsoPuntos c");
 
-        return (List<Cliente>)q.getResultList();
+        return (List<ConceptoUsoPuntos>)q.getResultList();
     }
 
     public void update(ConceptoUsoPuntos entidad, int id) throws ParseException {
@@ -44,6 +42,13 @@ public class ConceptoUsoPuntosDAO {
 
         Query q = this.em.createQuery("DELETE from ConceptoUsoPuntos c WHERE c.idConceptoUsoPuntos =" + id);
         q.executeUpdate();
+
+    }
+
+    public ConceptoUsoPuntos searchById(int id){
+
+        Query q = this.em.createQuery("select c from ConceptoUsoPuntos c WHERE c.idConceptoUsoPuntos =" + id);
+        return (ConceptoUsoPuntos) q.getResultList();
 
     }
 
