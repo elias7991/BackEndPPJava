@@ -1,8 +1,6 @@
 package py.com.progweb.prueba.rest;
 
-import py.com.progweb.prueba.ejb.ConceptoUsoPuntosDAO;
 import py.com.progweb.prueba.ejb.VencimientoPuntosDAO;
-import py.com.progweb.prueba.model.ConceptoUsoPuntos;
 import py.com.progweb.prueba.model.VencimientoPuntos;
 
 import javax.ejb.EJBTransactionRolledbackException;
