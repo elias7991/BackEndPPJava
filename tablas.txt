@@ -34,7 +34,7 @@ CREATE SEQUENCE sec_reglas_asignacion START 1;
 CREATE TABLE reglas_asig(
 	-- autoincremental
 	id_reglas_asig INTEGER DEFAULT NEXTVAL('sec_reglas_asignacion') NOT NULL,
-	limite_inferior INTEGER NOT NULL,
+	limite_inferior INTEGER CHECK (limite_inferior > 0) NOT NULL,
 	limite_superior INTEGER CHECK (limite_superior > limite_inferior) NOT NULL,
 	puntos INTEGER CHECK (puntos > 0) NOT NULL,
 	CONSTRAINT asi_puntos_pk PRIMARY KEY (id_reglas_asig)
