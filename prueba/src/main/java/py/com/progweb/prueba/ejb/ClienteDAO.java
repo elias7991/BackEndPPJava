@@ -31,6 +31,13 @@ public class ClienteDAO {
         return (List<Cliente>)q.getResultList();
     }
 
+    // por mes de cumpleaños
+    public List<Cliente> listaCumple(String mesCumple){
+        int mes = Integer.parseInt(mesCumple);
+        Query q = this.em.createQuery("select c from Cliente c where month(c.fecha_nacimiento) == " + mes);
+        return (List<Cliente>)q.getResultList();
+    }
+
     public void update(Cliente entidad, int id) throws ParseException {
 
         Cliente e = this.em.find(Cliente.class, id);
