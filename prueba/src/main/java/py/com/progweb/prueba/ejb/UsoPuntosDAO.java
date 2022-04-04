@@ -18,14 +18,15 @@ public class UsoPuntosDAO {
     private EntityManager em;
 
     ConceptoUsoPuntosDAO puntosDAO;
-    CabeceraDAO cabeceraDAO;
-    DetalleDAO detalleDAO;
     BolsaPuntosDAO bolsaPuntosDAO;
 
-    public void agregar(UsoPuntos entidad) throws ParseException {
+    public void agregar(UsoPuntos entidad) {
 
-
-        ConceptoUsoPuntos concepto = puntosDAO.searchById(entidad.getIdConcepto());
+        puntosDAO = new ConceptoUsoPuntosDAO();
+        bolsaPuntosDAO = new BolsaPuntosDAO();
+        Query qConcep = this.em.createQuery("select c from ConceptoUsoPuntos c WHERE c.idConceptoUsoPuntos = ?1");
+        qConcep.setParameter(1, entidad.getIdConcepto());
+        ConceptoUsoPuntos concepto = (ConceptoUsoPuntos) qConcep.getResultList();
 
         // Cantidad de puntos a utilizar
         int puntosRequeridos = concepto.getPuntosRequeridos();
@@ -38,7 +39,7 @@ public class UsoPuntosDAO {
         List<BolsaPuntos> bolsas = (List<BolsaPuntos>)q.getResultList();
 
         // Lista de bolsas uilizadas
-        ArrayList<BolsaPuntos> bolsasUtilizadas = new ArrayList<BolsaPuntos>();
+        ArrayList<BolsaPuntos> bolsasUtilizadas = new ArrayList<>();
 
         // Buscar todas las bolsas a utilizar para los puntos necesarios
         for(BolsaPuntos b : bolsas){
@@ -54,11 +55,13 @@ public class UsoPuntosDAO {
             throw new QueryException("No existen puntos suficientes");
         }
 
+        // Crear cabecera
         Cabecera cabecera = new Cabecera();
         cabecera.setIdCliente(entidad.getIdCliente());
         cabecera.setPuntajeUtilizado(puntosRequeridos);
         this.em.persist(cabecera);
 
+        // Crear detalle
         Detalle detalle = new Detalle();
         detalle.setIdCabecera(cabecera.getIdCabecera());
         detalle.setPuntajeUtilizado(puntosRequeridos);
@@ -72,12 +75,13 @@ public class UsoPuntosDAO {
             else {
                 this.bolsaPuntosDAO.updatePuntos(b.getId_bolsa_puntos(), puntosRequeridos);
             }
+            // Enlazar detalle con bolsas utilizadas
+            DetalleBolsaPuntosManytoMany m2m = new DetalleBolsaPuntosManytoMany();
+            m2m.setIdDetalle(detalle.getIdDetalle());
+            m2m.setIdBolsaPuntos(b.getId_bolsa_puntos());
+            this.em.persist(m2m);
             puntosRequeridos-= b.getSaldo_puntos();
         }
-
-        // Enlazar Cabecera con Bolsas de puntos
-
-        //this.em.persist(entidad);
 
     }
 
