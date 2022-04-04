@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.time.*; 
 
 
 @Stateless
@@ -30,6 +31,18 @@ public class BolsaPuntosDAO {
 
     public List<BolsaPuntos> listaCliente(int id){
         Query q = this.em.createQuery("select b from BolsaPuntos b where b.id_cliente=" + id);
+        return (List<BolsaPuntos>)q.getResultList();
+    }
+
+    public List<BolsaPuntos> listaPorVencer(int dias) {
+        LocalDate t = LocalDate.now();
+        LocalDate n = t.plusDays(dias);
+        Date today = Date.valueOf(t);
+        Date next = Date.valueOf(n);
+        Query q = this.em.createQuery("select b from BolsaPuntos b where b.fecha_caducidad >= ?1 and b.fecha_caducidad <= ?2");
+        q.setParameter(1, today);
+        q.setParameter(2, next);
+
         return (List<BolsaPuntos>)q.getResultList();
     }
 
