@@ -1,15 +1,13 @@
 package py.com.progweb.prueba.ejb;
 
 import org.hibernate.QueryException;
-import py.com.progweb.prueba.model.BolsaPuntos;
-import py.com.progweb.prueba.model.Cabecera;
-import py.com.progweb.prueba.model.ConceptoUsoPuntos;
-import py.com.progweb.prueba.model.UsoPuntos;
+import py.com.progweb.prueba.model.*;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +18,11 @@ public class UsoPuntosDAO {
     private EntityManager em;
 
     ConceptoUsoPuntosDAO puntosDAO;
-    CabeceraDAO cabeceraDAODAO;
+    CabeceraDAO cabeceraDAO;
+    DetalleDAO detalleDAO;
+    BolsaPuntosDAO bolsaPuntosDAO;
 
-    public void agregar(UsoPuntos entidad) {
+    public void agregar(UsoPuntos entidad) throws ParseException {
 
 
         ConceptoUsoPuntos concepto = puntosDAO.searchById(entidad.getIdConcepto());
@@ -50,14 +50,32 @@ public class UsoPuntosDAO {
 
         }
 
-        Cabecera cabecera = new Cabecera();
-        cabecera.setIdCliente(entidad.getIdCliente());
-        cabecera.setPuntajeUtilizado(puntosRequeridos);
-
         if(puntosUtilizados < puntosRequeridos){
             throw new QueryException("No existen puntos suficientes");
         }
 
+        Cabecera cabecera = new Cabecera();
+        cabecera.setIdCliente(entidad.getIdCliente());
+        cabecera.setPuntajeUtilizado(puntosRequeridos);
+        this.em.persist(cabecera);
+
+        Detalle detalle = new Detalle();
+        detalle.setIdCabecera(cabecera.getIdCabecera());
+        detalle.setPuntajeUtilizado(puntosRequeridos);
+        this.em.persist(detalle);
+
+        // Consumir puntos de las bolsas
+        for(BolsaPuntos b : bolsasUtilizadas){
+            if(b.getSaldo_puntos() - puntosRequeridos < 0){
+                this.bolsaPuntosDAO.updatePuntos(b.getId_bolsa_puntos(), b.getSaldo_puntos());
+            }
+            else {
+                this.bolsaPuntosDAO.updatePuntos(b.getId_bolsa_puntos(), puntosRequeridos);
+            }
+            puntosRequeridos-= b.getSaldo_puntos();
+        }
+
+        // Enlazar Cabecera con Bolsas de puntos
 
         //this.em.persist(entidad);
 

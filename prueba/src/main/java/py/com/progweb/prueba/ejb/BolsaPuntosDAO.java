@@ -55,6 +55,16 @@ public class BolsaPuntosDAO {
 
     }
 
+    public void updatePuntos(int id, int cantidad) {
+
+        BolsaPuntos e = this.em.find(BolsaPuntos.class, id);
+        e.setPuntos_utilizados(e.getPuntos_utilizados() + cantidad);
+        e.setSaldo_puntos(e.getPuntos_totales() - e.getPuntos_utilizados());
+
+        this.em.merge(e);
+
+    }
+
     public void delete(int id){
 
         BolsaPuntos e = this.em.find(BolsaPuntos.class, id);
