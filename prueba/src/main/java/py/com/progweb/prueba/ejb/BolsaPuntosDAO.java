@@ -29,6 +29,36 @@ public class BolsaPuntosDAO {
         return (List<BolsaPuntos>)q.getResultList();
     }
 
+    public List<BolsaPuntos> listaRango(String rango){
+        int longitud = 0;
+        System.out.println(longitud);
+        for (int i = 0; i < rango.length (); i++) { 
+            if(rango.charAt(i) != '-') {
+                longitud++;
+            } else {
+                break;
+            }
+        }
+        System.out.println(longitud);
+        int inferior = Integer.parseInt(rango.substring(0, longitud));
+        System.out.println(inferior);
+        int superior = Integer.parseInt(rango.substring(longitud+1, rango.length()));
+        System.out.println(superior);
+        
+        if(inferior > superior) {
+            int aux;
+            aux = inferior;
+            inferior = superior;
+            superior = aux;
+        }
+
+        Query q = this.em.createQuery("select bp from BolsaPuntos bp where bp.puntos_totales >= ?1 and bp.puntos_totales <= ?2");
+        q.setParameter(1, inferior);
+        q.setParameter(2, superior);
+        
+        return (List<BolsaPuntos>)q.getResultList();
+    }
+
     public List<BolsaPuntos> listaCliente(int id){
         Query q = this.em.createQuery("select b from BolsaPuntos b where b.id_cliente=" + id);
         return (List<BolsaPuntos>)q.getResultList();

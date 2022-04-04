@@ -1,17 +1,14 @@
 package py.com.progweb.prueba.rest;
-import py.com.progweb.prueba.ejb.BolsaPuntosDAO;
-import py.com.progweb.prueba.model.BolsaPuntos;
 
-import javax.ejb.EJBTransactionRolledbackException;
-import javax.persistence.PersistenceException;
-import java.sql.SQLException;
-import java.text.ParseException;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import javax.inject.Inject;
+
+import py.com.progweb.prueba.ejb.BolsaPuntosDAO;
 
 
-@Path("bolsapuntosporcliente")
+
+@Path("bolsapuntosRango")
 @Consumes("application/json")
 @Produces("application/json")
 
@@ -21,10 +18,10 @@ public class BolsaPuntosRangoRest {
     private BolsaPuntosDAO bolsapuntosDAO;
 
     @GET
-    // persona/
-    @Path("/{idCliente}")
-    public Response listarRango(@PathParam("idCliente") Integer idCliente){
-        return Response.ok(bolsapuntosDAO.listaCliente(idCliente)).build();
+    // rango es una cadena de este tipo: limiteInferior-limiteSuperior
+    @Path("/{rango}")
+    public Response listarRango(@PathParam("rango") String rango){
+        return Response.ok(bolsapuntosDAO.listaRango(rango)).build();
     }
 
 }
